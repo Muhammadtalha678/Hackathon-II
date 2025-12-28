@@ -1,55 +1,55 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+- Version change: 1.0.0 → 1.1.0
+- Modified principles: [PRINCIPLE_1_NAME] → Spec-Driven Development, [PRINCIPLE_2_NAME] → Clean Code, [PRINCIPLE_3_NAME] → Test-First Development, [PRINCIPLE_4_NAME] → Single Responsibility, [PRINCIPLE_5_NAME] → Evolutionary Architecture, [PRINCIPLE_6_NAME] → User Experience First
+- Added sections: None
+- Removed sections: None
+- Templates requiring updates: ⚠ pending - .specify/templates/plan-template.md, .specify/templates/spec-template.md, .specify/templates/tasks-template.md
+- Follow-up TODOs: None
+-->
+
+# Evolution of Todo Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Spec-Driven Development
+All code must be generated from specifications using Claude Code; no manual coding allowed. Every feature implementation must start with a clear specification that defines behavior, inputs, outputs, and acceptance criteria before any code is written.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Clean Code
+Follow Python conventions (PEP 8), use type hints, write docstrings for all public functions. Code must be readable, maintainable, and follow established best practices for the language and framework being used.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Test-First Development
+TDD is mandatory; write failing tests first (Red), implement to pass (Green), then refactor. Every feature and bug fix must be accompanied by appropriate tests that verify the expected behavior before implementation.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Single Responsibility
+Each module and function has one clear purpose; separate concerns (models, manager, UI). Every component should have a single reason to change and should be focused on a specific domain or functionality.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### Evolutionary Architecture
+Design for Phase I in-memory storage but structure code to support future database persistence. The architecture must be flexible enough to accommodate future requirements while maintaining clean separation of concerns and avoiding premature optimization.
 
-### [PRINCIPLE_6_NAME]
+### User Experience First
+Clear prompts, helpful error messages, intuitive interactive menu flow. Every interaction with the system should be designed with the end user in mind, providing clear feedback and guidance throughout the application flow.
 
+## Development Standards
 
-[PRINCIPLE__DESCRIPTION]
+The Evolution of Todo project follows Python best practices and conventions:
+- All code must comply with PEP 8 style guidelines
+- Type hints required for all function parameters and return values
+- Comprehensive docstrings for all public functions, classes, and modules
+- Consistent naming conventions following Python standards
+- Proper error handling with descriptive messages
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Development Workflow
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+The project follows a strict TDD workflow:
+- Write failing tests first to define expected behavior
+- Implement minimal code to pass tests
+- Refactor for quality and maintainability
+- Commit changes with descriptive messages
+- Ensure all tests pass before merging
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution governs all development activities for the Evolution of Todo project. All code contributions must comply with these principles. Changes to this constitution require explicit approval from project maintainers and must be documented with appropriate rationale.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.1.0 | **Ratified**: 2025-12-28 | **Last Amended**: 2025-12-28
