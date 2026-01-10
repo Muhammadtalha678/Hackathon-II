@@ -136,9 +136,9 @@ def update_task_for_user(session: SessionDep, task_id: int, user_id: int, task_d
         from datetime import datetime
         task.updated_at = datetime.now()
         # print(task)
-        # session.add(task)
-        # session.commit()
-        # session.refresh(task)
+        session.add(task)
+        session.commit()
+        session.refresh(task)
         return task
     except NotFoundException:
         raise

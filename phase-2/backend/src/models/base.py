@@ -31,10 +31,10 @@ class BaseModel(SQLModel):
     Provides common fields and methods that all models should have.
     Inherit from this class when creating new models.
     """
-    id: Optional[int] = Field(
+    id: Optional[str] = Field(
         default=None,
         primary_key=True,
-        description="Primary key"
+        # description="Primary key"
     )
 
     class Config:

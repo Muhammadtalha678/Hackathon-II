@@ -20,7 +20,7 @@ router = APIRouter(
     tags=["Tasks"]
 )
 
-UserID = Annotated[int, Path(gt=0,description="The user ID")]
+UserID = Annotated[str, Path(min_length=1,description="The user ID")]
 
 @router.get("/tasks", response_model=List[Task])
 def list_user_tasks(
@@ -90,7 +90,7 @@ def get_user_task(
 def create_user_task(
     session: SessionDep,
     task_data: TaskCreate,
-    user_id: int = Path(..., description="The ID of the user to create task for"),
+    user_id: str = Path(..., description="The ID of the user to create task for"),
     current_user: User = Depends(get_current_user),
 ) -> Task:
     """

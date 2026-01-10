@@ -17,16 +17,12 @@ class UserBase(SQLModel):
     Base schema for User with common fields.
     Used for validation in create/update operations.
     """
-    email: str = Field(
-        max_length=255,
-        index=True,
-        unique=True,
-        description="User's email address for identification"
-    )
-    is_active: bool = Field(
-        default=True,
-        description="Flag indicating if user account is active"
-    )
+    # id: str = Field(primary_key=True)
+    name: str
+    email: str = Field(unique=True, index=True)
+    emailVerified: bool
+    image: Optional[str] = None
+
 
 
 class UserCreate(UserBase):
@@ -65,7 +61,7 @@ class User(UserBase, BaseModel, TimestampMixin, table=True):
         updated_at: Last update timestamp (from TimestampMixin)
         tasks: List of associated Task objects (back_populates="user")
     """
-    __tablename__ = "users"  # Explicit table name
+    __tablename__ = "user"  # Explicit table name
 
     # Relationship to Task model
     tasks: List["Task"] = Relationship(back_populates="user")

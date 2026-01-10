@@ -30,8 +30,8 @@ class TaskBase(SQLModel):
         default=False,
         description="Flag indicating if task is completed"
     )
-    user_id: int = Field(
-        foreign_key="users.id",
+    user_id: str = Field(
+        foreign_key="user.id",
         description="Foreign key linking to the owning user"
     )
 
@@ -54,7 +54,7 @@ class TaskUpdate(SQLModel):
     is_completed: Optional[bool] = Field(default=None)
 
 
-class Task(TaskBase, BaseModel, TimestampMixin, table=True):
+class Task(TaskBase, TimestampMixin, table=True):
     """
     Task database model for task management.
 
@@ -75,6 +75,10 @@ class Task(TaskBase, BaseModel, TimestampMixin, table=True):
         user: Relationship to the owning User (back_populates="tasks")
     """
     __tablename__ = "tasks"  # Explicit table name
-
+    id: Optional[int] = Field(
+        default=None,
+        primary_key=True,
+        description="Primary key"
+    )
     # Relationship to User model
     user: Optional["User"] = Relationship(back_populates="tasks")
