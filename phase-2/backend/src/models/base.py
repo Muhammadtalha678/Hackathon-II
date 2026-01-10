@@ -16,12 +16,14 @@ class TimestampMixin(SQLModel):
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(),
         nullable=False,
-        description="Timestamp when record was created"
+        description="Timestamp when record was created",
+        sa_column_kwargs={"name": "createdAt"}
     )
     updated_at: datetime = Field(
         default_factory=lambda: datetime.now(),
         nullable=False,
-        description="Timestamp when record was last updated"
+        description="Timestamp when record was last updated",
+        sa_column_kwargs={"name": "updatedAt"}
     )
 
 class BaseModel(SQLModel):
