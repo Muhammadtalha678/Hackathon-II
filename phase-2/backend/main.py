@@ -7,10 +7,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from src.lib.db_connect import DBConfig
 from src.lib.env_config import Config
-
+import httpx
 # Import routers (add your routers here)
 from src.routers import task_router
-
+async def get_public_key(client:httpx.AsyncClient):
+    while True:
+        print("request send")
+        jwk = await client.get("http://localhost:3000/api/auth/jwks") 
+        return jwk.json()
+        # await asyncio.sleep(300)    
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -32,7 +37,10 @@ async def lifespan(app: FastAPI):
 
         # Store db instance in app state for session dependency
         app.state.db_init = db
-
+        client = httpx.AsyncClient()
+        jwk = await get_public_key(client)
+        print(jwk["keys"])
+        app.state.jwks = jwk["keys"]
         print("=" * 50)
         print(f"{Config.APP_NAME} started successfully")
         print(f"  Version: {Config.APP_VERSION}")
@@ -50,6 +58,7 @@ async def lifespan(app: FastAPI):
     print("=" * 50)
     print("Shutting down application...")
     app.state.db_init.close_connection()
+    await client.aclose()
     print("Application shut down successfully")
     print("=" * 50)
 
