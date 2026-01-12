@@ -13,7 +13,7 @@ from src.routers import task_router
 async def get_public_key(client:httpx.AsyncClient):
     while True:
         print("request send")
-        jwk = await client.get("http://localhost:3000/api/auth/jwks") 
+        jwk = await client.get(Config.frontend_jwks_url) 
         return jwk.json()
         # await asyncio.sleep(300)    
 @asynccontextmanager
@@ -73,13 +73,13 @@ app = FastAPI(
 )
 
 # Configure CORS (adjust for production)
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # Configure appropriately for production
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Configure appropriately for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Register routers (add your routers here)
 app.include_router(task_router.router)

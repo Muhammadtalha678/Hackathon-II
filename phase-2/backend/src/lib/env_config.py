@@ -35,6 +35,7 @@ class Config:
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
+    frontend_jwks_url = os.getenv("frontend_jwks_url","http://localhost:3000/api/auth/jwks")
     # Optional: For databases requiring additional query parameters
     DB_DRIVER_ODBC: Optional[str] = os.getenv("DB_DRIVER_ODBC")  # For SQL Server
 
