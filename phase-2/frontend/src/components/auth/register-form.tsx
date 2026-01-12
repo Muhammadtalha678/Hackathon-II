@@ -30,7 +30,9 @@ const registerSchema = z
   .object({
     name: z.string().min(1, "Name is required"),
     email: z.email("Please enter a valid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
+    password: z.string().min(8, "Password must be at least 8 characters long").regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
+      message: "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+    }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
