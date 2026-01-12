@@ -7,7 +7,8 @@ export const auth = betterAuth({
     connectionString: process.env.DATABASE_URL,
   }),
   emailAndPassword: {
-    enabled: true, requireEmailVerification: false
+    enabled: true, requireEmailVerification: false,
+    autoSignIn: false
   },
   plugins: [
     jwt({
