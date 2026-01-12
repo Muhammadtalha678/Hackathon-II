@@ -1,0 +1,337 @@
+# API Contracts: Next.js Frontend with Authentication and Task Management
+
+## Overview
+The Next.js frontend communicates with two API endpoints:
+1. **Better Auth API** - Handles user authentication, sessions, and JWT generation
+2. **FastAPI Backend API** - Handles task management operations
+
+## Authentication API (Better Auth)
+
+### Registration
+**Endpoint**: `POST /api/auth/register`
+**Description**: Register a new user account
+**Request**:
+```json
+{
+  "name": "string (required)",
+  "email": "string (required, unique)",
+  "password": "string (required)",
+  "confirmPassword": "string (required)"
+}
+```
+**Response**:
+```json
+{
+  "user": {
+    "id": "string",
+    "name": "string",
+    "email": "string",
+    "is_active": "boolean"
+  },
+  "session": {
+    "token": "string (JWT)",
+    "expiresAt": "timestamp"
+  }
+}
+```
+
+### Login
+**Endpoint**: `POST /api/auth/login`
+**Description**: Authenticate user with email and password
+**Request**:
+```json
+{
+  "email": "string (required)",
+  "password": "string (required)"
+}
+```
+**Response**:
+```json
+{
+  "user": {
+    "id": "string",
+    "name": "string",
+    "email": "string",
+    "is_active": "boolean"
+  },
+  "session": {
+    "token": "string (JWT)",
+    "expiresAt": "timestamp"
+  }
+}
+```
+
+### Logout
+**Endpoint**: `POST /api/auth/logout`
+**Description**: End user session
+**Request**: None (uses session cookie/JWT)
+**Response**:
+```json
+{
+  "success": "boolean",
+  "message": "string"
+}
+```
+
+### Get Current User
+**Endpoint**: `GET /api/auth/me`
+**Description**: Get current authenticated user info
+**Request**: None (uses session cookie/JWT)
+**Response**:
+```json
+{
+  "user": {
+    "id": "string",
+    "name": "string",
+    "email": "string",
+    "is_active": "boolean"
+  }
+}
+```
+
+### Update Profile
+**Endpoint**: `PUT /api/auth/profile`
+**Description**: Update user profile information
+**Request**:
+```json
+{
+  "name": "string (required)"
+}
+```
+**Response**:
+```json
+{
+  "user": {
+    "id": "string",
+    "name": "string",
+    "email": "string",
+    "is_active": "boolean"
+  }
+}
+```
+
+### Change Password
+**Endpoint**: `POST /api/auth/change-password`
+**Description**: Change user password with old password verification
+**Request**:
+```json
+{
+  "oldPassword": "string (required)",
+  "newPassword": "string (required)",
+  "confirmNewPassword": "string (required)"
+}
+```
+**Response**:
+```json
+{
+  "success": "boolean",
+  "message": "string"
+}
+```
+
+## Task Management API (FastAPI Backend)
+
+### Base URL
+**Development**: `http://127.0.0.1:8000`
+**Headers**: `Authorization: Bearer <JWT_TOKEN>`
+
+### Get All Tasks
+**Endpoint**: `GET /api/{user_id}/tasks`
+**Description**: Retrieve all tasks for the authenticated user
+**Path Parameters**:
+- `user_id`: Integer ID of the logged-in user
+**Headers**:
+- `Authorization: Bearer <JWT_TOKEN>`
+**Response**:
+```json
+[
+  {
+    "id": 3,
+    "title": "string",
+    "description": "string | null",
+    "is_completed": "boolean",
+    "user_id": 4,
+    "created_at": "2026-01-08T07:56:27.055288",
+    "updated_at": "2026-01-08T07:56:27.055288"
+  }
+]
+```
+
+### Get Single Task
+**Endpoint**: `GET /api/{user_id}/tasks/{task_id}`
+**Description**: Retrieve a specific task by ID
+**Path Parameters**:
+- `user_id`: Integer ID of the logged-in user
+- `task_id`: Integer ID of the task to retrieve
+**Headers**:
+- `Authorization: Bearer <JWT_TOKEN>`
+**Response**:
+```json
+{
+  "id": 3,
+  "title": "string",
+  "description": "string | null",
+  "is_completed": "boolean",
+  "user_id": 4,
+  "created_at": "2026-01-08T07:56:27.055288",
+  "updated_at": "2026-01-08T07:56:27.055288"
+}
+```
+
+### Create Task
+**Endpoint**: `POST /api/{user_id}/tasks`
+**Description**: Create a new task for the user
+**Path Parameters**:
+- `user_id`: Integer ID of the logged-in user
+**Headers**:
+- `Authorization: Bearer <JWT_TOKEN>`
+**Request Body**:
+```json
+{
+  "title": "string (required, min 1, max 500)",
+  "description": "string | null (optional, max 2000)",
+  "is_completed": "boolean (optional, default false)"
+}
+```
+**Response**:
+```json
+{
+  "id": 8,
+  "title": "string",
+  "description": "string | null",
+  "is_completed": "boolean",
+  "user_id": 4,
+  "created_at": "2026-01-08T14:01:38.904695",
+  "updated_at": "2026-01-08T14:01:38.904695"
+}
+```
+
+### Update Task
+**Endpoint**: `PUT /api/{user_id}/tasks/{task_id}`
+**Description**: Update an existing task
+**Path Parameters**:
+- `user_id`: Integer ID of the logged-in user
+- `task_id`: Integer ID of the task to update
+**Headers**:
+- `Authorization: Bearer <JWT_TOKEN>`
+**Request Body**:
+```json
+{
+  "title": "string (required, min 1, max 500)",
+  "description": "string | null (optional, max 2000)",
+  "is_completed": "boolean (optional)"
+}
+```
+**Response**:
+```json
+{
+  "id": 8,
+  "title": "string",
+  "description": "string | null",
+  "is_completed": "boolean",
+  "user_id": 4,
+  "created_at": "2026-01-08T14:01:38.904695",
+  "updated_at": "2026-01-08T14:46:05.717641"
+}
+```
+
+### Delete Task
+**Endpoint**: `DELETE /api/{user_id}/tasks/{task_id}`
+**Description**: Delete a specific task
+**Path Parameters**:
+- `user_id`: Integer ID of the logged-in user
+- `task_id`: Integer ID of the task to delete
+**Headers**:
+- `Authorization: Bearer <JWT_TOKEN>`
+**Response**:
+```json
+{
+  "success": true,
+  "message": "string",
+  "deleted_id": 8
+}
+```
+
+### Toggle Task Completion
+**Endpoint**: `PATCH /api/{user_id}/tasks/{task_id}/complete`
+**Description**: Toggle the completion status of a task
+**Path Parameters**:
+- `user_id`: Integer ID of the logged-in user
+- `task_id`: Integer ID of the task to toggle
+**Headers**:
+- `Authorization: Bearer <JWT_TOKEN>`
+**Response**:
+```json
+{
+  "id": 7,
+  "title": "string",
+  "description": "string | null",
+  "is_completed": "boolean",
+  "user_id": 4,
+  "created_at": "2026-01-08T13:50:38.383746",
+  "updated_at": "2026-01-08T14:52:33.056747"
+}
+```
+
+## Frontend API Service Layer
+
+### AppRoutes File Structure
+```typescript
+// lib/api/AppRoutes.ts
+export const AppRoutes = {
+  // Authentication routes (Better Auth)
+  AUTH: {
+    REGISTER: '/api/auth/register',
+    LOGIN: '/api/auth/login',
+    LOGOUT: '/api/auth/logout',
+    ME: '/api/auth/me',
+    PROFILE: '/api/auth/profile',
+    CHANGE_PASSWORD: '/api/auth/change-password'
+  },
+
+  // Task management routes (FastAPI Backend)
+  TASKS: (userId: number) => ({
+    ALL: `/api/${userId}/tasks`,
+    SINGLE: (taskId: number) => `/api/${userId}/tasks/${taskId}`,
+    COMPLETE: (taskId: number) => `/api/${userId}/tasks/${taskId}/complete`
+  })
+};
+```
+
+### API Service Functions
+```typescript
+// lib/api/task-service.ts
+export interface TaskService {
+  getAllTasks(userId: number): Promise<Task[]>;
+  getTaskById(userId: number, taskId: number): Promise<Task>;
+  createTask(userId: number, taskData: TaskFormData): Promise<Task>;
+  updateTask(userId: number, taskId: number, taskData: TaskFormData): Promise<Task>;
+  deleteTask(userId: number, taskId: number): Promise<TaskDeletionResponse>;
+  toggleTaskCompletion(userId: number, taskId: number): Promise<Task>;
+}
+```
+
+## Error Handling Contracts
+
+### Authentication Errors
+- `400 Bad Request`: Invalid input data
+- `401 Unauthorized`: Invalid credentials
+- `409 Conflict`: Email already exists
+
+### Task Management Errors
+- `400 Bad Request`: Invalid input data (e.g., title too long)
+- `401 Unauthorized`: Invalid or expired JWT token
+- `403 Forbidden`: User attempting to access another user's tasks
+- `404 Not Found`: Task or user not found
+- `500 Internal Server Error`: Server-side error
+
+### Client-Side Error Responses
+```typescript
+interface ApiErrorResponse {
+  error: {
+    message: string;
+    code?: string;
+    details?: any;
+  };
+}
+```
