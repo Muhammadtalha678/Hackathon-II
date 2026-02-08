@@ -6,7 +6,7 @@ import httpx
 
 async def get_public_key(client:httpx.AsyncClient):
     while True:
-        print("Config.frontend_jwks_url")
+        # print("Config.frontend_jwks_url")
         jwk = await client.get(Config.frontend_jwks_url) 
         return jwk.json()
         # await asyncio.sleep(300)    
@@ -35,7 +35,7 @@ async def app_lifespan(server: FastMCP):
         # app.state.db_init = db
         client = httpx.AsyncClient()
         jwk = await get_public_key(client)
-        print(jwk["keys"])
+        # print(jwk["keys"])
         # app.state.jwks = jwk["keys"]
         print("=" * 50)
         print(f"{Config.APP_NAME} started successfully")

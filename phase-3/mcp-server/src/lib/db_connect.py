@@ -48,7 +48,7 @@ class DBConfig:
         try:
             with self.engine.connect() as conn:
                 print("Database connected successfully")
-                print(f"  Database URL: {self._mask_password(self.url)}")
+                # print(f"  Database URL: {self._mask_password(self.url)}")
         except Exception as e:
             print(f"Database connection failed: {e}")
             raise Exception(f"Error connecting to database: {e}")

@@ -28,7 +28,7 @@ mcp = FastMCP(
     name=Config.APP_NAME,
     lifespan=app_lifespan,
     middleware=[AuthMiddleware()],
-    # stateless_http=True
+    stateless_http=True
 )
 
 

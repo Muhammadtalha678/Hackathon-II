@@ -1,6 +1,6 @@
 import httpx
 
-url = "http://localhost:8000/mcp"
+url = "https://hackathon-ii.onrender.com/mcp"
 
 # http://localhost:8000/mcP
 
