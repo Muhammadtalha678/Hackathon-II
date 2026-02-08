@@ -185,3 +185,10 @@ def update_task(
         raise te
     except Exception as e:
         raise ToolError(f"Update failed: {str(e)}")
+
+
+
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 10000))
+    mcp.run(transport="http", host="0.0.0.0", port=port)
