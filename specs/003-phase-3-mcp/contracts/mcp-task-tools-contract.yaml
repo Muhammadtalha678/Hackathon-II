@@ -1,0 +1,364 @@
+openapi: 3.0.3
+info:
+  title: MCP Task Management Tools API
+  description: API contract for MCP server tools that expose task management capabilities for AI agents
+  version: 1.0.0
+paths:
+  /tools/add_task:
+    post:
+      summary: Create a new task
+      description: Creates a new task in the task management system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - title
+              properties:
+                user_id:
+                  type: string
+                  description: The ID of the user creating the task
+                  example: "ziakhan"
+                title:
+                  type: string
+                  description: The title of the task
+                  example: "Buy groceries"
+                description:
+                  type: string
+                  description: Optional description of the task
+                  example: "Milk, eggs, bread"
+      responses:
+        '200':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - task_id
+                  - status
+                  - title
+                properties:
+                  task_id:
+                    type: integer
+                    description: The unique ID of the created task
+                    example: 5
+                  status:
+                    type: string
+                    description: The status of the operation
+                    example: "created"
+                  title:
+                    type: string
+                    description: The title of the created task
+                    example: "Buy groceries"
+        '400':
+          description: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Missing required fields"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Internal server error"
+
+  /tools/list_tasks:
+    post:
+      summary: Retrieve tasks from the list
+      description: Retrieves tasks based on user_id and optional status filter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+              properties:
+                user_id:
+                  type: string
+                  description: The ID of the user whose tasks to retrieve
+                  example: "ziakhan"
+                status:
+                  type: string
+                  description: Optional filter for task status (all, pending, completed)
+                  enum: [all, pending, completed]
+                  example: "pending"
+      responses:
+        '200':
+          description: Tasks retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - title
+                    - completed
+                  properties:
+                    id:
+                      type: integer
+                      description: The unique ID of the task
+                      example: 1
+                    title:
+                      type: string
+                      description: The title of the task
+                      example: "Buy groceries"
+                    completed:
+                      type: boolean
+                      description: Whether the task is completed
+                      example: false
+        '400':
+          description: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Invalid status parameter"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Internal server error"
+
+  /tools/complete_task:
+    post:
+      summary: Mark a task as complete
+      description: Marks a specific task as complete
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - task_id
+              properties:
+                user_id:
+                  type: string
+                  description: The ID of the user requesting the operation
+                  example: "ziakhan"
+                task_id:
+                  type: integer
+                  description: The ID of the task to mark as complete
+                  example: 3
+      responses:
+        '200':
+          description: Task marked as complete successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - task_id
+                  - status
+                  - title
+                properties:
+                  task_id:
+                    type: integer
+                    description: The ID of the completed task
+                    example: 3
+                  status:
+                    type: string
+                    description: The status of the operation
+                    example: "completed"
+                  title:
+                    type: string
+                    description: The title of the completed task
+                    example: "Call mom"
+        '400':
+          description: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Task not found or user mismatch"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Internal server error"
+
+  /tools/delete_task:
+    post:
+      summary: Remove a task from the list
+      description: Removes a specific task from the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - task_id
+              properties:
+                user_id:
+                  type: string
+                  description: The ID of the user requesting the operation
+                  example: "ziakhan"
+                task_id:
+                  type: integer
+                  description: The ID of the task to delete
+                  example: 2
+      responses:
+        '200':
+          description: Task deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - task_id
+                  - status
+                  - title
+                properties:
+                  task_id:
+                    type: integer
+                    description: The ID of the deleted task
+                    example: 2
+                  status:
+                    type: string
+                    description: The status of the operation
+                    example: "deleted"
+                  title:
+                    type: string
+                    description: The title of the deleted task
+                    example: "Old task"
+        '400':
+          description: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Task not found or user mismatch"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Internal server error"
+
+  /tools/update_task:
+    post:
+      summary: Modify task title or description
+      description: Updates the title or description of a specific task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - task_id
+              properties:
+                user_id:
+                  type: string
+                  description: The ID of the user requesting the operation
+                  example: "ziakhan"
+                task_id:
+                  type: integer
+                  description: The ID of the task to update
+                  example: 1
+                title:
+                  type: string
+                  description: New title for the task (optional)
+                  example: "Buy groceries and fruits"
+                description:
+                  type: string
+                  description: New description for the task (optional)
+                  example: "Milk, eggs, bread, apples"
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - task_id
+                  - status
+                  - title
+                properties:
+                  task_id:
+                    type: integer
+                    description: The ID of the updated task
+                    example: 1
+                  status:
+                    type: string
+                    description: The status of the operation
+                    example: "updated"
+                  title:
+                    type: string
+                    description: The title of the updated task
+                    example: "Buy groceries and fruits"
+        '400':
+          description: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Task not found or user mismatch"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+                    example: "Internal server error"
