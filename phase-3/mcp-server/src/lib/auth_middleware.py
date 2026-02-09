@@ -13,10 +13,10 @@ from src.models.user import User
 class AuthMiddleware(Middleware):
     async def on_request(self, context: MiddlewareContext, call_next):
         
-        # print(f"DEBUG: Middleware running for method: {context.method}")
-        start_time = time.perf_counter()
-        print("Middleware: Pre-processing")
-        """Intercepts requests to verify JWT and set user in scope."""
+        print(f"DEBUG: Middleware running for method: {context.method}")
+        # start_time = time.perf_counter()
+        # print("Middleware: Pre-processing")
+        # """Intercepts requests to verify JWT and set user in scope."""
         # 1. Access the global FastMCP context from the Middleware context
         mcp_ctx = context.fastmcp_context
 
@@ -82,7 +82,7 @@ class AuthMiddleware(Middleware):
         # Back in middleware after tool finished
         # duration = time.perf_counter() - start_time
         # print(f"Middleware: Tool took {duration:.4f} seconds")
-        # print("response",response)
+        print("response",response)
         return response
 
 

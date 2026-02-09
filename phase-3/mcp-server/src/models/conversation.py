@@ -9,6 +9,7 @@ from src.models.base import BaseModel, TimestampMixin
 
 if TYPE_CHECKING:
     from src.models.user import User
+    from src.models.message import Message
 
 
 class ConversationBase(SQLModel):
@@ -69,3 +70,4 @@ class Conversation(ConversationBase, TimestampMixin, table=True):
     )
     # Relationship to User model
     user: Optional["User"] = Relationship(back_populates="conversations")
+    messages: Optional[List["Message"]] = Relationship(back_populates="conversations")

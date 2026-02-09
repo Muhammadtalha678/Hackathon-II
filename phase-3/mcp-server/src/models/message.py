@@ -10,6 +10,7 @@ from src.models.base import BaseModel, TimestampMixin
 
 if TYPE_CHECKING:
     from src.models.user import User
+    from src.models.conversation import Conversation
 
 class Role(str, Enum):
     USER = "user"
@@ -81,3 +82,4 @@ class Message(MessageBase, TimestampMixin, table=True):
     )
     # Relationship to User model
     user: Optional["User"] = Relationship(back_populates="messages")
+    conversations: Optional["Conversation"] = Relationship(back_populates="messages")

@@ -38,8 +38,9 @@ def list_tasks(user_id:str,status: str = "all",context:Context = None)->List[Tas
     Tool to list tasks from the database with optional status filtering.
     """
     user = context.request_context.request.state.user
-    print(user.id)
+    print("list_tasks",status)
     if user_id != user.id:
+        # print(user_id != user.id)
         raise ToolError(f"Security Alert: You cannot access tasks for user {user_id}")
     db = context.request_context.lifespan_context.get("db")
     try:
@@ -75,7 +76,23 @@ def add_task(
     
     try:
         with next(db.get_session()) as session:
-            
+             # --- Duplicate Check Logic Start ---
+            statement = select(User).where(User.id == auth_user.id)
+            user = session.exec(statement).first()
+
+            if not user:
+                raise ToolError("User not found in database.")
+
+            # 2. Duplicate Check
+            duplicate_exists = any(
+                t.title.lower() == task.title.lower() and t.is_completed is False
+                for t in user.tasks
+            )
+
+            if duplicate_exists:
+                raise ToolError(f"Duplicate Error: Task with the name '{task.title}' already exists in your list!")
+
+            # --- Duplicate Check Logic End ---
             new_task = Task(**task.model_dump())
             
             session.add(new_task)
@@ -96,6 +113,7 @@ def add_task(
 
 @mcp.tool(name="complete_task", description="Mark a task as complete")
 def complete_task(user_id: str, task_id: int, context: Context):
+    print("complete_task",task_id)
     auth_user = context.request_context.request.state.user
     if user_id != auth_user.id:
         raise ToolError("Unauthorized access")
@@ -121,6 +139,7 @@ def complete_task(user_id: str, task_id: int, context: Context):
 
 @mcp.tool(name="delete_task", description="Remove a task from the list")
 def delete_task(user_id: str, task_id: int, context: Context):
+    print("delete_task",task_id)
     auth_user = context.request_context.request.state.user
     if user_id != auth_user.id:
         raise ToolError("Unauthorized access")
@@ -148,6 +167,7 @@ def update_task(
     description: Optional[str] = None, 
     context: Context = None
 ):
+    print("update_task",task_id)
     auth_user = context.request_context.request.state.user
     if user_id != auth_user.id:
         raise ToolError("Unauthorized access")
