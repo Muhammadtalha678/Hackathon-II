@@ -7,7 +7,7 @@ import httpx
 async def get_public_key(client:httpx.AsyncClient):
     while True:
         # print("Config.frontend_jwks_url")
-        jwk = await client.get(Config.frontend_jwks_url) 
+        jwk = await client.get(f"{Config.frontend_url}/api/auth/jwks") 
         return jwk.json()
         # await asyncio.sleep(300)    
 

@@ -4,6 +4,7 @@ from starlette import status
 from fastmcp import FastMCP, Context
 from fastmcp.server.middleware import Middleware, MiddlewareContext
 from fastmcp.exceptions import ToolError
+from src.lib.env_config import Config
 from sqlmodel import select
 import time
 # Assumes src.models.user.User is available
@@ -56,8 +57,8 @@ class AuthMiddleware(Middleware):
                 token,
                 public_key_obj,
                 algorithms=[key['alg']],
-                issuer= "https://hackathon-ii-eta.vercel.app",
-                audience= "https://hackathon-ii-eta.vercel.app"
+                issuer= Config.frontend_url,  # Ensure this matches the token's issuer
+                audience= Config.frontend_url  # Ensure this matches the token's audience
             )
             email = decoded_data["email"]
             # print(decoded_data)
