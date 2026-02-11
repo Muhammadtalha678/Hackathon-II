@@ -1,3 +1,12 @@
+---
+title: My Backend
+sdk: docker
+emoji: 🚀
+colorFrom: blue
+colorTo: green
+app_port: 7860
+---
+
 # .
 
 A production-ready FastAPI backend with SQLModel ORM, supporting any SQL database.

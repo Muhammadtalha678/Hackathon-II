@@ -15,5 +15,7 @@ COPY . /app
 
 RUN uv sync --frozen --no-cache
 
+ENV PATH="/app/.venv/bin:$PATH"
+
 # Run the application.
-CMD ["uv", "run","uvicorn", "main:app", "--host", "0.0.0.0","--port", "7896"]
+CMD ["uv", "run","uvicorn", "main:app", "--host", "0.0.0.0","--port", "7860"]
