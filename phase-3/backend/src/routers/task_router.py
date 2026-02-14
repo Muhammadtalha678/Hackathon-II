@@ -12,7 +12,7 @@ from src.models.task import Task, TaskCreate, TaskUpdate
 from src.controllers import task_controller
 from src.lib.auth import get_current_user
 from src.models.user import User
-
+from src.lib.helper.AuthContext import AuthContext
 
 # Create router with prefix and tags
 router = APIRouter(
@@ -26,7 +26,7 @@ UserID = Annotated[str, Path(min_length=1,description="The user ID")]
 def list_user_tasks(
     session: SessionDep,
     user_id: UserID,
-    current_user: User = Depends(get_current_user),
+    current_user: AuthContext = Depends(get_current_user),
 ) -> List[Task]:
     """
     List all tasks for the specified user.
@@ -45,7 +45,7 @@ def list_user_tasks(
     # Verify that the user_id in the URL matches the authenticated user
     # print("current_user",current_user)
     # print("user_id",user_id)
-    if current_user.id != user_id:
+    if current_user.user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied: Cannot access another user's tasks"
@@ -59,7 +59,7 @@ def get_user_task(
     session: SessionDep,
     user_id:UserID,
     task_id: int = Path(..., description="The ID of the task to retrieve"),
-    current_user: User = Depends(get_current_user),
+    current_user: AuthContext = Depends(get_current_user),
 ) -> Task:
     """
     Get details of a specific task for the specified user.
@@ -77,7 +77,7 @@ def get_user_task(
         HTTPException: If user_id in URL doesn't match authenticated user or task not found
     """
     # Verify that the user_id in the URL matches the authenticated user
-    if current_user.id != user_id:
+    if current_user.user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied: Cannot access another user's task"
@@ -91,7 +91,7 @@ def create_user_task(
     session: SessionDep,
     task_data: TaskCreate,
     user_id: str = Path(..., description="The ID of the user to create task for"),
-    current_user: User = Depends(get_current_user),
+    current_user: AuthContext = Depends(get_current_user),
 ) -> Task:
     """
     Create a new task for the specified user.
@@ -109,9 +109,9 @@ def create_user_task(
         HTTPException: If user_id in URL doesn't match authenticated user
     """
     # Verify that the user_id in the URL matches the authenticated user
-    print(current_user.id)
-    print(user_id)
-    if current_user.id != user_id:
+    # print(current_user.id)
+    # print(user_id)
+    if current_user.user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied: Cannot create task for another user"
@@ -126,7 +126,7 @@ def update_user_task(
     session: SessionDep,
     user_id:UserID,
     task_id: int = Path(..., description="The ID of the task to update"),
-    current_user: User = Depends(get_current_user),
+    current_user: AuthContext = Depends(get_current_user),
 ) -> Task:
     """
     Update a specific task for the specified user.
@@ -145,7 +145,7 @@ def update_user_task(
         HTTPException: If user_id in URL doesn't match authenticated user or task not found
     """
     # Verify that the user_id in the URL matches the authenticated user
-    if current_user.id != user_id:
+    if current_user.user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied: Cannot update another user's task"
@@ -159,7 +159,7 @@ def delete_user_task(
     session: SessionDep,
     user_id:UserID,
     task_id: int = Path(..., description="The ID of the task to delete"),
-    current_user: User = Depends(get_current_user),
+    current_user: AuthContext = Depends(get_current_user),
 ) -> dict:
     """
     Delete a specific task for the specified user.
@@ -177,7 +177,7 @@ def delete_user_task(
         HTTPException: If user_id in URL doesn't match authenticated user or task not found
     """
     # Verify that the user_id in the URL matches the authenticated user
-    if current_user.id != user_id:
+    if current_user.user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied: Cannot delete another user's task"
@@ -191,7 +191,7 @@ def toggle_task_completion(
     session: SessionDep,
     user_id:UserID,
     task_id: int = Path(..., description="The ID of the task to update"),
-    current_user: User = Depends(get_current_user),
+    current_user: AuthContext = Depends(get_current_user),
 ) -> Task:
     """
     Toggle the completion status of a specific task for the specified user.
@@ -209,7 +209,7 @@ def toggle_task_completion(
         HTTPException: If user_id in URL doesn't match authenticated user or task not found
     """
     # Verify that the user_id in the URL matches the authenticated user
-    if current_user.id != user_id:
+    if current_user.user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied: Cannot update another user's task"
