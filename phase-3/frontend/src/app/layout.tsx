@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { Toaster } from "sonner";
+import { ChatbotWrapper } from "@/components/ChatbotWrapper";
+// import "@openai/chatkit-react/";
+// import "@openai/chatkit-react/styles.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +34,9 @@ export default function RootLayout({
       >
         <Navigation />
         <main>{children}</main>
+
+        {/* This will render on all pages but hide itself on login/register/profile */}
+        <ChatbotWrapper /> 
         <Toaster richColors position="top-center" />
       </body>
     </html>
