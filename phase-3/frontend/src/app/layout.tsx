@@ -36,7 +36,7 @@ export default function RootLayout({
         <main>{children}</main>
 
         {/* This will render on all pages but hide itself on login/register/profile */}
-        <ChatbotWrapper /> 
+        {/* <ChatbotWrapper />  */}
         <Toaster richColors position="top-center" />
       </body>
     </html>
