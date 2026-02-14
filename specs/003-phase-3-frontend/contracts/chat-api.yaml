@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: AI Chatbot API
+  version: 1.0.0
+  description: API for interacting with the AI chatbot service
+
+servers:
+  - url: https://muhammad51059579-phase-3-backend.hf.space
+    description: Production server
+
+paths:
+  /api/{user_id}/chat:
+    post:
+      summary: Send a message to the AI chatbot
+      description: Sends a user message to the AI chatbot and receives a response
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user sending the message
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: The user's message or query
+                  example: "Hello, how can I help you today?"
+              required:
+                - query
+      responses:
+        '200':
+          description: Successful response from the chatbot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                    description: The chatbot's response to the user's query
+                    example: "Hello! I'm here to help you with your tasks."
+                  timestamp:
+                    type: string
+                    format: date-time
+                    description: When the response was generated
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Description of the error
+                    example: "Query is required"
+        '401':
+          description: Unauthorized - invalid or missing authentication token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Description of the error
+                    example: "Invalid authentication token"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Description of the error
+                    example: "Internal server error occurred"
+      security:
+        - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
