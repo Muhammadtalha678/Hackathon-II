@@ -32,7 +32,7 @@ export function ChatbotWrapper() {
         }
 
         // Forward request to FastAPI
-        return fetch(`http://localhost:8000/${userId}/chat`, {
+        return fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${userId}/chat`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
